@@ -86,4 +86,28 @@ module.exports = {
       res.status(500).json(err);
     }
   },
+
+  async addThoughtToUser(userId, thoughtId) {
+    try {
+      const dbUserData = await User.findOneAndUpdate(
+        { _id: userId },
+        { $addToSet: { thoughts: thoughtId } },
+        { new: true }
+      );
+    } catch (err) {
+      console.log(err);
+    }
+  },
+
+  async removeThoughtFromUser(username, thoughtId) {
+    try {
+      const dbUserData = await User.findOneAndUpdate(
+        { username: username },
+        { $pullAll: { thoughts: [thoughtId] } },
+        { new: true }
+      );
+    } catch (err) {
+      console.log(err);
+    }
+  },
 };
